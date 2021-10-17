@@ -5,11 +5,13 @@ import * as cookieParser from 'cookie-parser';
 
 import Logger from './lib/Logger';
 
-import IndexPageRouter from './routes/indexPage';
-import LoginPageRouter from './routes/loginPage';
+import IndexPageRouter from './routes/IndexPage';
+import LoginPageRouter from './routes/LoginPage';
+import { PrismaClient } from '@prisma/client';
 
 class MainServer {
     public app: express.Application;
+
     constructor() {
         this.app = express();
 
@@ -54,4 +56,15 @@ class MainServer {
     }
 }
 
-let app = new MainServer();
+// let app = new MainServer();
+
+let test = async () => {
+    let prisma = new PrismaClient();
+    let res = await prisma.user.findFirst({
+        where: {
+            loginId: 'tilto0822',
+        },
+    });
+    Logger.info(res);
+};
+test();

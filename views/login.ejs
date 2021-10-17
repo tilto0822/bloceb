@@ -1,59 +1,12 @@
-<!DOCTYPE html>
-<html lang="ko">
-    <head>
-        <meta charset="utf-8" />
-        <title>bloceb - 블록코딩으로 만드는 나만의 웹사이트</title>
-        <link rel="stylesheet" href="./fonts/fonts.css" />
-        <link rel="stylesheet" href="./fontawesome/css/all.min.css" />
-        <link rel="stylesheet" href="./css/global.css" />
-        <link rel="stylesheet" href="./css/login.css" />
-        <script src="./js/jquery-3.6.0.min.js"></script>
-    </head>
-    <body>
-        <header class="site-header">
-            <div class="site-logo clickable">bloceb</div>
-            <div class="site-menu">
-                <div class="menu-select clickable" onclick="goTopage('about')">
-                    소개
-                </div>
-                <div
-                    class="menu-select clickable"
-                    onclick="goToPage('projects')"
-                >
-                    프로젝트
-                </div>
-                <% if (isLogin == false) { %>
-                <div class="menu-select clickable" onclick="goToPage('login')">
-                    <i class="fas fa-sign-in-alt clickable"></i>
-                </div>
-                <% } else { %>
-                <div class="menu-select clickable" onclick="goToPage('user')">
-                    <i class="fas fa-user clickable"></i>
-                </div>
-                <% } %>
-            </div>
-        </header>
-        <section class="main-wrapper">
-            <div class="login-box">
-                <div class="box-title">LOGIN</div>
-                <hr />
-                <input class="box-input" id="id-input" placeholder="ID" />
-                <input
-                    type="password"
-                    class="box-input"
-                    id="pw-input"
-                    placeholder="PW"
-                />
-                <button class="box-button disabled" id="login-button" disabled>
-                    로그인
-                </button>
-                <hr />
-                <div class="box-bot clickable">비밀번호를 잊으셨나요?</div>
-                <div class="box-bot clickable">회원이 아니신가요?</div>
-            </div>
-        </section>
-        <footer class="site-footer"></footer>
-        <script src="./js/global.js"></script>
-        <script src="./js/login.js"></script>
-    </body>
-</html>
+<div class="login-box">
+    <div class="box-title">LOGIN</div>
+    <hr />
+    <input class="box-input" id="id-input" placeholder="ID" />
+    <input type="password" class="box-input" id="pw-input" placeholder="PW" />
+    <button class="box-button disabled" id="login-button" disabled>
+        로그인
+    </button>
+    <hr />
+    <div class="box-bot clickable">비밀번호를 잊으셨나요?</div>
+    <div class="box-bot clickable">회원이 아니신가요?</div>
+</div>

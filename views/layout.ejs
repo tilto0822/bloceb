@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8" />
+        <title><%= title %></title>
+        <link rel="stylesheet" href="./fonts/fonts.css" />
+        <link rel="stylesheet" href="./fontawesome/css/all.min.css" />
+        <% for (let i = 0; i < css.length; i++) { %>
+        <link rel="stylesheet" href="./css/<%= css[i] %>.css" />
+        <% } %>
+        <script src="./js/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="site-logo clickable">bloceb</div>
+            <div class="site-menu">
+                <div class="menu-select clickable" onclick="goTopage('about')">
+                    소개
+                </div>
+                <div
+                    class="menu-select clickable"
+                    onclick="goToPage('projects')"
+                >
+                    프로젝트
+                </div>
+                <% if (isLogin == false) { %>
+                <div class="menu-select clickable" onclick="goToPage('login')">
+                    <i class="fas fa-sign-in-alt clickable"></i>
+                </div>
+                <% } else { %>
+                <div class="menu-select clickable" onclick="goToPage('user')">
+                    <i class="fas fa-user clickable"></i>
+                </div>
+                <% } %>
+            </div>
+        </header>
+        <section class="main-wrapper"><%- content %></section>
+        <footer class="site-footer"></footer>
+        <% for (let i = 0; i < js.length; i++) { %>
+        <script src="./js/<%= js[i] %>.js"></script>
+        <% } %>
+    </body>
+</html>

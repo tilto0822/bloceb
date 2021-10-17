@@ -6,9 +6,14 @@ class LoginPageRouter extends Router {
         super();
 
         this._router.get('/', (req, res, next) => {
-            res.render('login', {
-                isLogin: false,
-            });
+            let renderRes = this.renderLayout(['login.ejs'], {
+                stylesheets: ['login'],
+                javascripts: ['login'],
+            }); // string
+
+            res.writeHead(200, { 'Content-type': 'text/html' });
+            res.write(renderRes);
+            res.end();
         });
     }
 }
