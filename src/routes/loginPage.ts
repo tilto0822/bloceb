@@ -1,19 +1,18 @@
-import * as express from 'express';
 import Router from '../lib/Router';
 
 class LoginPageRouter extends Router {
     constructor() {
         super();
 
-        this._router.get('/', (req, res, next) => {
+        this._router.get('/', (ctx, next) => {
             let renderRes = this.renderLayout(['login.ejs'], {
                 stylesheets: ['login'],
                 javascripts: ['login'],
             }); // string
 
-            res.writeHead(200, { 'Content-type': 'text/html' });
-            res.write(renderRes);
-            res.end();
+            ctx.status = 200;
+            ctx.type = 'text/html; charset=utf-8';
+            ctx.body = renderRes;
         });
     }
 }

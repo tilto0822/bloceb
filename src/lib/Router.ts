@@ -1,9 +1,7 @@
-import * as express from 'express';
 import * as fs from 'fs';
 import * as p from 'path';
-import * as ejs from 'ejs';
-
-import Logger from './Logger';
+import { ejs } from 'koa-ejs';
+import * as KoaRouter from 'koa-router';
 
 // const layout = fs.readFileSync(
 //     path.join(__dirname, '..', '..', 'views', 'layout.ejs'),
@@ -19,20 +17,22 @@ export interface layoutData {
 
 export interface globalData {
     isLogin: boolean;
+    userData: object;
 }
 
 export class Router {
-    protected _router: express.Router;
+    protected _router: KoaRouter;
     protected _pathEJSMap: Map<string, string>;
 
     constructor() {
-        this._router = express.Router();
+        this._router = new KoaRouter();
         this._pathEJSMap = new Map();
     }
 
     protected getGlobalData(): globalData {
         return {
             isLogin: false,
+            userData: {},
         };
     }
 
@@ -75,13 +75,6 @@ export class Router {
         });
 
         return renderResult;
-
-        // this._router.get(path, (req, res, next) => {
-
-        //     res.writeHead(200, { 'Content-type': 'text/html' });
-        //     res.write(renderResult);
-        //     res.end();
-        // });
     }
 
     get router() {

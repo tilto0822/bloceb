@@ -8,8 +8,6 @@ CREATE TABLE `User` (
     `email` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `User_uuid_key`(`uuid`),
-    UNIQUE INDEX `User_loginId_key`(`loginId`),
-    UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`uuid`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -21,7 +19,6 @@ CREATE TABLE `Project` (
     `authorId` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `Project_uuid_key`(`uuid`),
-    UNIQUE INDEX `Project_title_key`(`title`),
     PRIMARY KEY (`uuid`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
