@@ -1,0 +1,14 @@
+.main-wrapper {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: flex-start;
+}
+
+.user-box {
+    max-width: 90%;
+    min-width: 500px;
+    min-height: 300px;
+    background-color: #fff;
+    box-shadow: 0 0 15px 0 grey;
+}

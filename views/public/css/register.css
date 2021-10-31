@@ -4,9 +4,9 @@
     align-items: center;
 }
 
-.login-box {
+.register-box {
     width: 300px;
-    height: 400px;
+    height: 450px;
     background-color: #fff;
     box-shadow: 0 0 15px 0 grey;
     display: flex;
@@ -14,24 +14,24 @@
     align-items: center;
     justify-content: center;
 }
-.login-box .box-title {
+.register-box .box-title {
     margin: 10px 0;
     font-size: 2rem;
     font-family: 'NexonLv2Bold';
     font-weight: 900;
 }
-.login-box hr {
+.register-box hr {
     width: 90%;
     margin: 10px 0;
 }
-.login-box form {
+.register-box form {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-.login-box input {
+.register-box input {
     margin: 5px 0;
     padding: 0 5px;
     width: 75%;
@@ -40,11 +40,11 @@
     border: 1px solid grey;
     border-radius: 5px;
 }
-.login-box input:focus {
+.register-box input:focus {
     border: 3px solid #1976d2;
     outline: none;
 }
-.login-box button {
+.register-box button {
     margin: 20px 0 10px 0;
     width: 50%;
     height: 40px;
@@ -55,17 +55,17 @@
     font-family: 'NexonLv2Bold';
     font-size: 1rem;
 }
-.login-box button:disabled {
+.register-box button:disabled {
     background-color: #63a4ff;
 }
-.login-box button:active {
+.register-box button:active {
     background-color: #004ba0;
 }
-.login-box .err-message {
+.register-box .err-message {
     color: #d50000;
     font-size: 0.9rem;
 }
-.login-box .box-bot {
+.register-box .box-bot {
     margin: 0 0 5px 0;
     color: #1976d2;
 }

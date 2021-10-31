@@ -1,0 +1,41 @@
+<div class="register-box">
+    <div class="box-title">REGISTER</div>
+    <hr />
+    <form
+        action="/api/users/register"
+        name="register-form"
+        accept-charset="utf-8"
+        method="post"
+    >
+        <input type="text" class="box-input" id="id-input" name="loginId"
+        placeholder="ID" maxlength="12" <% if (previousId !== null) { %>
+        value="<%= previousId %>" <% } %> />
+        <input
+            type="password"
+            class="box-input"
+            id="pw-input"
+            name="password"
+            placeholder="PW"
+            maxlength="20"
+        />
+        <input
+            type="password"
+            class="box-input"
+            id="pw-check-input"
+            placeholder="PW Check"
+            maxlength="20"
+        />
+        <input type="text" class="box-input" id="nickname-input" name="nickname"
+        placeholder="nickname" maxlength="12" <% if (previousNickname !== null)
+        { %> value="<%= previousNickname %>" <% } %> /> <input type="text"
+        class="box-input" id="email-input" name="email" placeholder="E-mail"
+        maxlength="30" <% if (previousEmail !== null) { %> value="<%=
+        previousEmail %>" <% } %> /> <% if (errMessage !== null) { %>
+        <div class="err-message"><%= errMessage %></div>
+        <% } %>
+        <button type="submit" class="box-button" id="register-button" disabled>
+            회원가입
+        </button>
+    </form>
+    <hr />
+</div>

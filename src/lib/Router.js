@@ -1,45 +1,50 @@
 import * as fs from 'fs';
 import * as p from 'path';
+import * as Koa from 'koa';
 import { ejs } from 'koa-ejs';
 import * as KoaRouter from 'koa-router';
+import { User } from '@prisma/client';
 
 // const layout = fs.readFileSync(
 //     path.join(__dirname, '..', '..', 'views', 'layout.ejs'),
 //     'utf-8'
 // );
 
-export interface layoutData {
-    title?: string;
-    data?: Object;
-    stylesheets?: string[];
-    javascripts?: string[];
-}
+// export interface layoutData {
+//     title?: string;
+//     data?: Object;
+//     stylesheets?: string[];
+//     javascripts?: string[];
+// }
 
-export interface globalData {
-    isLogin: boolean;
-    userData: object;
-}
+// export interface globalData {
+//     isLogin: boolean;
+//     userData: User | null;
+// }
 
 export class Router {
-    protected _router: KoaRouter;
-    protected _pathEJSMap: Map<string, string>;
+    _router;
+    _pathEJSMap;
 
     constructor() {
         this._router = new KoaRouter();
         this._pathEJSMap = new Map();
     }
 
-    protected getGlobalData(): globalData {
+    getGlobalData(ctx) {
+        let logined = ctx.loginedUser ? true : false;
         return {
-            isLogin: false,
-            userData: {},
+            isLogin: logined,
+            userData: {
+                uuid: ctx.loginedUser.uuid,
+                loginId: ctx.loginedUser.loginId,
+                nickname: ctx.loginedUser.nickname,
+                email: ctx.loginedUser.email,
+            },
         };
     }
 
-    protected renderLayout(
-        renderTarget: string[],
-        options: layoutData = {}
-    ): string {
+    renderLayout(ctx, renderTarget, options = {}) {
         let layout = fs.readFileSync(
             p.join(__dirname, '..', '..', 'views', 'layout.ejs'),
             'utf-8'
@@ -59,7 +64,7 @@ export class Router {
             ? ['global', ...options.javascripts]
             : ['global'];
 
-        let gd = this.getGlobalData();
+        let gd = this.getGlobalData(ctx);
 
         let renderResult = ejs.render(layout, {
             title: title,

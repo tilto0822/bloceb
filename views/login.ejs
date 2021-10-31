@@ -1,12 +1,32 @@
 <div class="login-box">
     <div class="box-title">LOGIN</div>
     <hr />
-    <input class="box-input" id="id-input" placeholder="ID" />
-    <input type="password" class="box-input" id="pw-input" placeholder="PW" />
-    <button class="box-button disabled" id="login-button" disabled>
-        로그인
-    </button>
+    <form
+        action="/api/users/login"
+        name="login-form"
+        accept-charset="utf-8"
+        method="post"
+    >
+        <input type="text" class="box-input" id="id-input" name="loginId"
+        placeholder="ID" <% if (previousId !== null) { %> value="<%= previousId
+        %>" <% } %> />
+        <input
+            type="password"
+            class="box-input"
+            id="pw-input"
+            name="password"
+            placeholder="PW"
+        />
+        <% if (errMessage !== null) { %>
+        <div class="err-message"><%= errMessage %></div>
+        <% } %>
+        <button type="submit" class="box-button" id="login-button" disabled>
+            로그인
+        </button>
+    </form>
     <hr />
     <div class="box-bot clickable">비밀번호를 잊으셨나요?</div>
-    <div class="box-bot clickable">회원이 아니신가요?</div>
+    <div class="box-bot clickable" onclick="location.href='/register';">
+        회원이 아니신가요?
+    </div>
 </div>
