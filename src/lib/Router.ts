@@ -1,26 +1,33 @@
 import * as fs from 'fs';
 import * as p from 'path';
-import * as Koa from 'koa';
 import { ejs } from 'koa-ejs';
 import * as KoaRouter from 'koa-router';
-import { User } from '@prisma/client';
+import Logger from './Logger';
+import { Context } from 'koa';
 
 // const layout = fs.readFileSync(
 //     path.join(__dirname, '..', '..', 'views', 'layout.ejs'),
 //     'utf-8'
 // );
 
-// export interface layoutData {
-//     title?: string;
-//     data?: Object;
-//     stylesheets?: string[];
-//     javascripts?: string[];
-// }
+export interface renderGlobalData {
+    isLogin: boolean;
+    userData: renderGlobalDataUser | null;
+}
 
-// export interface globalData {
-//     isLogin: boolean;
-//     userData: User | null;
-// }
+export interface renderGlobalDataUser {
+    uuid: string;
+    loginId: string;
+    nickname: string;
+    email: string;
+}
+
+export interface renderLayoutOption {
+    title?: string;
+    stylesheets?: string[];
+    javascripts?: string[];
+    data?: Record<string, any>;
+}
 
 export class Router {
     _router;
@@ -31,20 +38,29 @@ export class Router {
         this._pathEJSMap = new Map();
     }
 
-    getGlobalData(ctx) {
-        let logined = ctx.loginedUser ? true : false;
-        return {
-            isLogin: logined,
-            userData: {
-                uuid: ctx.loginedUser.uuid,
-                loginId: ctx.loginedUser.loginId,
-                nickname: ctx.loginedUser.nickname,
-                email: ctx.loginedUser.email,
-            },
-        };
+    getGlobalData(ctx: Context): renderGlobalData {
+        if (ctx.loginedUser !== null)
+            return {
+                isLogin: true,
+                userData: {
+                    uuid: ctx.loginedUser.uuid,
+                    loginId: ctx.loginedUser.loginId,
+                    nickname: ctx.loginedUser.nickname,
+                    email: ctx.loginedUser.email,
+                },
+            };
+        else
+            return {
+                isLogin: false,
+                userData: null,
+            };
     }
 
-    renderLayout(ctx, renderTarget, options = {}) {
+    renderLayout(
+        ctx: any,
+        renderTarget: string[],
+        options: renderLayoutOption = {}
+    ): string {
         let layout = fs.readFileSync(
             p.join(__dirname, '..', '..', 'views', 'layout.ejs'),
             'utf-8'
@@ -65,6 +81,7 @@ export class Router {
             : ['global'];
 
         let gd = this.getGlobalData(ctx);
+        Logger.log(gd);
 
         let renderResult = ejs.render(layout, {
             title: title,

@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export class Lang {
-    static async getLangByCode(lang, code) {
+    static async getLangByCode(lang: string, code: string) {
         if (code.split(':').length > 1) {
             // `../../lang/${ns}/${lang}.json`
             let ns = code.split(':')[0];
@@ -60,7 +60,7 @@ export class Lang {
         }
     }
 
-    static async getLangNameSpace(lang, ns) {}
+    static async getLangNameSpace(lang: string, ns: string) {}
 }
 
 export default Lang;

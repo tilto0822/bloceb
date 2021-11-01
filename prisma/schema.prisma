@@ -23,7 +23,8 @@ model User {
 model Project {
   uuid     String @id @unique @default(uuid())
   title    String
-  code     String @db.MediumText
+  xmlCode  String @db.MediumText
+  viewCode String @db.MediumText
   author   User   @relation(fields: [authorId], references: [uuid])
   authorId String
 }

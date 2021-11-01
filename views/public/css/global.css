@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow: none;
+    overflow: hidden;
     cursor: default;
     font-family: 'NexonLv2', sans-serif;
 }
@@ -52,6 +52,58 @@ a {
     min-height: 100%;
 }
 
+#global-popup {
+    width: 100%;
+    height: 100%;
+    background-color: RGBA(20, 20, 20, 0.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+#global-popup .popup-box {
+    min-width: 250px;
+    max-width: 50%;
+    min-height: 150px;
+    max-height: 50%;
+    background-color: #fff;
+    box-shadow: 0 0 15px 0 grey;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+#global-popup .popup-box .popup-title {
+    margin: 5px 0;
+    font-weight: 700;
+    font-family: 'NexonLv2Bold';
+    font-size: 1.3rem;
+}
+#global-popup .popup-box hr {
+    margin: 5px 0;
+}
+#global-popup .popup-box .popup-footer {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+#global-popup .popup-box .popup-button {
+    margin: 0 3px;
+    padding: 0 5px;
+    border-radius: 10px;
+}
+#global-popup .popup-box .popup-button:hover {
+    background-color: #ddd;
+}
+
 #popup-user {
     padding: 10px 0;
     min-width: 150px;
@@ -66,6 +118,7 @@ a {
     line-height: normal;
     border-radius: 10px;
     color: #000;
+    z-index: 989;
 }
 #popup-user a:-webkit-any-link {
     color: #000;

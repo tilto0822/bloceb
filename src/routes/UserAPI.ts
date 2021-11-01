@@ -1,16 +1,15 @@
-import { PrismaClient, User } from '@prisma/client';
-import * as jwt from 'jsonwebtoken';
-
 import 'dotenv/config';
 import Router from '../lib/Router';
 import Logger from '../lib/Logger';
 import UserCrypto from '../lib/UserCrypto';
 import JsonWebToken from '../lib/JsonWebToken';
+import { Context } from 'koa';
 
 export interface UserData {
     uuid: string;
     loginId: string;
     nickname: string;
+    password: string;
     email: string;
 }
 
@@ -18,9 +17,10 @@ export class UserAPIRouter extends Router {
     constructor() {
         super();
 
-        this._router.post('/get/id', async (ctx, next) => {
+        this._router.post('/get/loginid', async (ctx, next) => {
             try {
-                let user = await UserAPIRouter.getUserByID(
+                let user = await UserAPIRouter.getUserByLoginID(
+                    ctx,
                     ctx.request.body.loginId
                 );
                 ctx.body = {
@@ -33,10 +33,10 @@ export class UserAPIRouter extends Router {
                     },
                 };
             } catch (err: any) {
-                if (err.message && err.message.startsWith('BLE::')) {
+                if (err.message && err.message.startsWith('BLE:')) {
                     ctx.body = {
                         type: 'Error',
-                        message: err.message.split('BLE::')[1],
+                        message: err.message,
                     };
                 } else {
                     Logger.error(err);
@@ -47,6 +47,7 @@ export class UserAPIRouter extends Router {
         this._router.post('/get/name', async (ctx, next) => {
             try {
                 let user = await UserAPIRouter.getUserByName(
+                    ctx,
                     ctx.request.body.nickname
                 );
                 ctx.body = {
@@ -59,10 +60,10 @@ export class UserAPIRouter extends Router {
                     },
                 };
             } catch (err: any) {
-                if (err.message && err.message.startsWith('BLE::')) {
+                if (err.message && err.message.startsWith('BLE:')) {
                     ctx.body = {
                         type: 'Error',
-                        message: err.message.split('BLE::')[1],
+                        message: err.message,
                     };
                 } else {
                     Logger.error(err);
@@ -71,29 +72,23 @@ export class UserAPIRouter extends Router {
         });
 
         this._router.post('/login', async (ctx, next) => {
+            let body = ctx.request.body;
             try {
-                let body: {
-                    logindId: string;
-                    password: string;
-                } = ctx.request.body;
                 let jwt = await UserAPIRouter.loginUser(
-                    body.logindId,
+                    ctx,
+                    body.loginId,
                     body.password
                 );
                 ctx.cookies.set('access_token', jwt, {
                     httpOnly: true,
                     maxAge: 1000 * 60 * 60 * 24 * 7,
                 });
-                ctx.body = {
-                    type: 'Success',
-                    message: '로그인에 성공하였습니다.',
-                };
+                ctx.redirect('/');
             } catch (err: any) {
-                if (err.message && err.message.startsWith('BLE::')) {
-                    ctx.body = {
-                        type: 'Error',
-                        message: err.message.split('BLE::')[1],
-                    };
+                if (err.message && err.message.startsWith('BLE:')) {
+                    ctx.redirect(
+                        `/login?id=${body.loginId}&message=${err.message}`
+                    );
                 } else {
                     Logger.error(err);
                 }
@@ -111,32 +106,28 @@ export class UserAPIRouter extends Router {
             };
         });
 
+        this._router.get('/logout', async (ctx, next) => {
+            ctx.cookies.set('access_token', null, {
+                httpOnly: true,
+                maxAge: 0,
+            });
+            ctx.redirect('/');
+        });
+
         this._router.post('/register', async (ctx, next) => {
+            let body = ctx.request.body;
             try {
-                let body: {
-                    loginId: string;
-                    nickname: string;
-                    password: string;
-                    email: string;
-                } = ctx.request.body;
-                let user = await UserAPIRouter.registerUser(body);
-                if (user)
-                    ctx.body = {
-                        type: 'Success',
-                        message: '회원가입에 성공했습니다!',
-                    };
+                let user = await UserAPIRouter.registerUser(ctx, body);
+                if (user) ctx.redirect('/');
                 else
-                    ctx.body = {
-                        type: 'Error',
-                        message:
-                            '알 수 없는 이유로 회원가입에 실패했습니다. 문제가 지속될 시 관리자에게 연락바랍니다.',
-                    };
+                    ctx.redirect(
+                        `/register?id=${body.loginId}&message=BLE:NONE`
+                    );
             } catch (err: any) {
-                if (err.message && err.message.startsWith('BLE::')) {
-                    ctx.body = {
-                        type: 'Error',
-                        message: err.message.split('BLE::')[1],
-                    };
+                if (err.message && err.message.startsWith('BLE:')) {
+                    ctx.redirect(
+                        `/register?id=${body.loginId}&message=${err.message}`
+                    );
                 } else {
                     Logger.error(err);
                 }
@@ -144,76 +135,61 @@ export class UserAPIRouter extends Router {
         });
     }
 
-    public static async loginUser(id: string, password: string) {
-        let prisma = new PrismaClient();
-        let getUser = await prisma.user.findFirst({
+    static async loginUser(ctx: Context, id: string, password: string) {
+        let getUser = await ctx.prisma.user.findFirst({
             where: {
                 loginId: id,
             },
         });
         if (getUser === null) {
-            prisma.$disconnect();
-            throw new Error('BLE::ID또는 비밀번호가 올바르지 않습니다!');
+            throw new Error('BLE:IDPW_IS_NOT_CORRECT');
         }
         let hashedPW = await UserCrypto.makePasswordHashed(
             password,
             getUser.pwsalt
         );
         if (hashedPW !== getUser.password) {
-            prisma.$disconnect();
-            throw new Error('BLE::ID또는 비밀번호가 올바르지 않습니다!');
+            throw new Error('BLE:IDPW_IS_NOT_CORRECT');
         }
-        prisma.$disconnect();
         return JsonWebToken.generateToken({
-            _uuid: getUser.uuid,
-            user: getUser,
+            uuid: getUser.uuid,
         });
     }
 
-    public static async registerUser(data: {
-        loginId: string;
-        nickname: string;
-        password: string;
-        email: string;
-    }): Promise<User> {
-        let prisma = new PrismaClient();
-        let checkId = await prisma.user.findFirst({
+    static async registerUser(ctx: Context, data: UserData) {
+        let checkId = await ctx.prisma.user.findFirst({
             where: {
                 loginId: data.loginId,
             },
         });
         if (checkId !== null) {
-            prisma.$disconnect();
-            throw new Error('BLE::이미 사용중인 ID입니다!');
+            throw new Error('BLE:ALREADY_USING_ID');
         }
-        let checkNick = await prisma.user.findFirst({
+        let checkNick = await ctx.prisma.user.findFirst({
             where: {
                 nickname: data.nickname,
             },
         });
         if (checkNick !== null) {
-            prisma.$disconnect();
-            throw new Error('BLE::이미 사용중인 닉네임입니다!');
+            throw new Error('BLE:ALREADY_USING_NICKNAME');
         }
         let emailPattern = new RegExp(
             /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/
         );
         if (!emailPattern.test(data.email)) {
-            prisma.$disconnect();
-            throw new Error('BLE::올바르지 않은 이메일 형식입니다!');
+            throw new Error('BLE:EMAIL_REGEXP_FAILED');
         }
-        let checkMail = await prisma.user.findFirst({
+        let checkMail = await ctx.prisma.user.findFirst({
             where: {
                 email: data.email,
             },
         });
         if (checkMail !== null) {
-            prisma.$disconnect();
-            throw new Error('BLE::이미 사용중인 이메일입니다!');
+            throw new Error('BLE:ALREADY_USING_EMAIL');
         }
         let salt = await UserCrypto.createRandomSalt();
         let hashedPW = await UserCrypto.makePasswordHashed(data.password, salt);
-        let newUser = await prisma.user.create({
+        let newUser = await ctx.prisma.user.create({
             data: {
                 loginId: data.loginId,
                 nickname: data.nickname,
@@ -222,34 +198,52 @@ export class UserAPIRouter extends Router {
                 email: data.email,
             },
         });
-        prisma.$disconnect();
         return newUser;
     }
 
-    public static async getUserByID(loginId: string): Promise<User> {
-        let prisma = new PrismaClient();
-        let user = await prisma.user.findFirst({
+    static async getUserByUUID(ctx: Context, uuid: string) {
+        let user = await ctx.prisma.user.findFirst({
+            where: {
+                uuid: uuid,
+            },
+        });
+        if (user === null) {
+            throw new Error('BLE:USER_NOT_FOUND');
+        } else return user;
+    }
+
+    static async getUserByLoginID(ctx: Context, loginId: string) {
+        let user = await ctx.prisma.user.findFirst({
             where: {
                 loginId: loginId,
             },
         });
         if (user === null) {
-            prisma.$disconnect();
-            throw new Error('BLE::해당 사용자를 찾을 수 없습니다.');
+            throw new Error('BLE:USER_NOT_FOUND');
         } else return user;
     }
 
-    public static async getUserByName(nickname: string): Promise<User> {
-        let prisma = new PrismaClient();
-        let user = await prisma.user.findFirst({
+    static async getUserByName(ctx: Context, nickname: string) {
+        let user = await ctx.prisma.user.findFirst({
             where: {
                 nickname: nickname,
             },
         });
         if (user === null) {
-            prisma.$disconnect();
-            throw new Error('BLE::해당 사용자를 찾을 수 없습니다.');
+            throw new Error('BLE:USER_NOT_FOUND');
         } else return user;
+    }
+
+    static async deleteUserByUUID(ctx: Context, uuid: string) {
+        let user = await ctx.prisma.user.delete({
+            where: {
+                uuid: uuid,
+            },
+        });
+        if (user === null) {
+            throw new Error('BLE:USER_NOT_FOUND');
+        }
+        return true;
     }
 }
 

@@ -12,8 +12,33 @@
     </head>
     <body>
         <div id="global-popup" style="display: none">
-            <div class="popup-box"></div>
+            <div class="popup-box">
+                <div class="popup-title">팝업 타이틀</div>
+                <hr />
+                <div class="popup-context">팝업 내용</div>
+                <div class="popup-footer">
+                    <div class="clickable popup-button popup-cancel">취소</div>
+                    <div class="clickable popup-button popup-submit">확인</div>
+                </div>
+            </div>
         </div>
+        <% if (isLogin == true) { %>
+        <div id="popup-user">
+            <a class="title clickable">
+                로그인 중 :<br />
+                <div class="head"><%= userData.nickname %></div>
+            </a>
+            <hr />
+            <a class="menu clickable" href="/user/<%= userData.nickname %>"
+                >내 정보</a
+            >
+            <a class="menu clickable" href="/project/<%= userData.nickname %>"
+                >내 프로젝트</a
+            >
+            <hr />
+            <a class="menu clickable" href="/api/users/logout">로그아웃</a>
+        </div>
+        <% } %>
         <header class="site-header">
             <a class="site-logo clickable">bloceb</a>
             <div class="site-menu">
@@ -25,24 +50,10 @@
                 </a>
                 <% } else { %>
                 <div class="menu-select clickable" id="user-popup">
-                    <i class="fas fa-user clickable"></i>
-                </div>
-                <div id="popup-user">
-                    <a class="title clickable">
-                        로그인 중 :<br />
-                        <div class="head"><%= userData.nickname %></div>
-                    </a>
-                    <hr />
-                    <a
-                        class="menu clickable"
-                        href="/user/<%= userData.nickname %>"
-                        >내 정보</a
-                    >
-                    <a class="menu clickable" href="/project">내 프로젝트</a>
-                    <hr />
-                    <a class="menu clickable" href="/api/users/logout"
-                        >로그아웃</a
-                    >
+                    <i
+                        class="fas fa-user clickable"
+                        style="margin-top: 16px"
+                    ></i>
                 </div>
                 <% } %>
             </div>

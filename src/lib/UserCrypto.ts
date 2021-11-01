@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 const randomBytesAsync = promisify(crypto.randomBytes);
 
 export class UserCrypto {
-    public static async createRandomSalt(): Promise<string> {
+    static async createRandomSalt() {
         try {
             return (await randomBytesAsync(64)).toString('base64');
         } catch (e) {
@@ -12,10 +12,7 @@ export class UserCrypto {
         }
     }
 
-    public static async makePasswordHashed(
-        password: string,
-        salt: string
-    ): Promise<string> {
+    static async makePasswordHashed(password: string, salt: string) {
         let hashed = crypto
             .pbkdf2Sync(password, salt, 9999, 64, 'sha512')
             .toString('base64');

@@ -9,6 +9,11 @@ class RegisterPageRouter extends Router {
         this._router.get('/', async (ctx, next) => {
             let { id, nickname, email, message } = ctx.query;
 
+            let msg: string | null =
+                message !== null && typeof message === 'string'
+                    ? message
+                    : null;
+
             let renderRes = this.renderLayout(ctx, ['register.ejs'], {
                 stylesheets: ['register'],
                 javascripts: ['register'],
@@ -16,8 +21,8 @@ class RegisterPageRouter extends Router {
                     previousId: id ? id : null,
                     previousNickname: nickname ? nickname : null,
                     previousEmail: email ? email : null,
-                    errMessage: message
-                        ? await Lang.getLangByCode('ko_kr', message)
+                    errMessage: msg
+                        ? await Lang.getLangByCode('ko_kr', msg)
                         : null,
                 },
             }); // string

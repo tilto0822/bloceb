@@ -11,7 +11,7 @@ const colors = {
 class Logger {
     constructor() {}
 
-    static info(message) {
+    static info(message: any) {
         process.stdout.write(
             colors.cyan + `[${moment().format('YYYY-MM-DD HH:mm:ss')}] INFO >> `
         );
@@ -19,7 +19,7 @@ class Logger {
         process.stdout.write(colors.reset);
     }
 
-    static warn(message) {
+    static warn(message: any) {
         process.stdout.write(
             colors.yellow +
                 `[${moment().format('YYYY-MM-DD HH:mm:ss')}] WARN >> `
@@ -28,7 +28,7 @@ class Logger {
         process.stdout.write(colors.reset);
     }
 
-    static error(message) {
+    static error(message: any) {
         process.stdout.write(
             colors.red + `[${moment().format('YYYY-MM-DD HH:mm:ss')}] ERROR >> `
         );
@@ -36,7 +36,7 @@ class Logger {
         process.stdout.write(colors.reset);
     }
 
-    static log(message) {
+    static log(message: any) {
         process.stdout.write(
             colors.reset + `[${moment().format('YYYY-MM-DD HH:mm:ss')}] LOG >> `
         );

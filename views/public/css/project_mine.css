@@ -1,0 +1,38 @@
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-content: center; */
+    align-items: center;
+}
+
+.project-box {
+    margin-top: 200px;
+    padding: 10px;
+    width: 75%;
+    min-width: 300px;
+    background-color: #fff;
+    box-shadow: 0 0 15px 0 grey;
+}
+.project-box .title {
+    margin: 20px 0 20px 10px;
+    font-weight: 900;
+    font-family: 'NexonLv2Bold';
+    font-size: 2rem;
+}
+.project-box hr {
+    margin: 10px 0;
+}
+.project-box .create-project {
+    margin: 0 10px;
+    width: 98%;
+    height: 30px;
+    border: 1px solid #2a9147;
+    border-radius: 10px;
+    background-color: #2da44e;
+    color: #fff;
+    font-size: 1.05rem;
+}
+.project-box .create-project:hover {
+    background-color: #2c974b;
+}

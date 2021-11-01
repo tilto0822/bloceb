@@ -1,1 +1,12 @@
-<%= userData.nickname %>님의 프로젝트
+<div class="project-box">
+    <div class="title"><%= nickname %>님의 프로젝트</div>
+    <hr />
+    <% if (nickname == userData.nickname) { %><button
+        class="clickable create-project"
+        onclick="createProject()"
+    >
+        새 프로젝트
+    </button>
+    <hr />
+    <% } %>
+</div>
