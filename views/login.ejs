@@ -7,9 +7,16 @@
         accept-charset="utf-8"
         method="post"
     >
-        <input type="text" class="box-input" id="id-input" name="loginId"
-        placeholder="ID" <% if (previousId !== null) { %> value="<%= previousId
-        %>" <% } %> />
+        <% if (redLink) { %>
+        <input
+            type="text"
+            name="redirect"
+            value="<%= redLink %>"
+            style="display: none"
+        />
+        <% } %> <input type="text" class="box-input" id="id-input"
+        name="loginId" placeholder="ID" <% if (previousId !== null) { %>
+        value="<%= previousId %>" <% } %> />
         <input
             type="password"
             class="box-input"

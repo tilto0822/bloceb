@@ -19,6 +19,8 @@ import ProjectPageRouter from './routes/ProjectPage';
 import UserAPIRouter from './routes/UserAPI';
 import ProjectAPIRouter from './routes/ProjectAPI';
 import DBMiddleware from './lib/DBMiddleWare';
+import EditPageRouter from './routes/EditPage';
+import ViewPageRouter from './routes/ViewPage';
 
 class MainServer {
     private app: Koa;
@@ -37,6 +39,7 @@ class MainServer {
         });
 
         this.app.use(KoaServe(path.join(__dirname, '..', 'views', 'public')));
+        this.app.use(KoaServe(path.join(__dirname, '..', 'dist', 'public')));
         this.app.use(KoaBodyParser());
         this.app.use(DBMiddleware);
         this.app.use(UserMiddleWare);
@@ -46,6 +49,8 @@ class MainServer {
         this.router.use('/register', new RegisterPageRouter().router.routes());
         this.router.use('/user', new UserPageRouter().router.routes());
         this.router.use('/project', new ProjectPageRouter().router.routes());
+        this.router.use('/edit', new EditPageRouter().router.routes());
+        this.router.use('/view', new ViewPageRouter().router.routes());
 
         this.router.use('/api/users', new UserAPIRouter().router.routes());
         this.router.use(

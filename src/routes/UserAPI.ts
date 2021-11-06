@@ -83,7 +83,8 @@ export class UserAPIRouter extends Router {
                     httpOnly: true,
                     maxAge: 1000 * 60 * 60 * 24 * 7,
                 });
-                ctx.redirect('/');
+                if (body.redirect) ctx.redirect(body.redirect);
+                else ctx.redirect('/');
             } catch (err: any) {
                 if (err.message && err.message.startsWith('BLE:')) {
                     ctx.redirect(
@@ -107,11 +108,14 @@ export class UserAPIRouter extends Router {
         });
 
         this._router.get('/logout', async (ctx, next) => {
+            let { redirect } = ctx.query;
             ctx.cookies.set('access_token', null, {
                 httpOnly: true,
                 maxAge: 0,
             });
-            ctx.redirect('/');
+            if (redirect && typeof redirect === 'string')
+                ctx.redirect(redirect);
+            else ctx.redirect('/');
         });
 
         this._router.post('/register', async (ctx, next) => {

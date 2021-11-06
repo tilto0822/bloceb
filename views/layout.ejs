@@ -2,6 +2,7 @@
 <html lang="ko">
     <head>
         <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <title><%= title %></title>
         <link rel="stylesheet" href="/fonts/fonts.css" />
         <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
@@ -36,7 +37,9 @@
                 >내 프로젝트</a
             >
             <hr />
-            <a class="menu clickable" href="/api/users/logout">로그아웃</a>
+            <a id="logout" class="menu clickable" href="/api/users/logout"
+                >로그아웃</a
+            >
         </div>
         <% } %>
         <header class="site-header">
@@ -45,15 +48,12 @@
                 <a class="menu-select clickable" href="/">소개</a>
                 <a class="menu-select clickable" href="/project">프로젝트</a>
                 <% if (isLogin == false) { %>
-                <a class="menu-select clickable" href="/login">
+                <a id="login" class="menu-select clickable" href="/login">
                     <i class="fas fa-sign-in-alt clickable"></i>
                 </a>
                 <% } else { %>
                 <div class="menu-select clickable" id="user-popup">
-                    <i
-                        class="fas fa-user clickable"
-                        style="margin-top: 16px"
-                    ></i>
+                    <i class="fas fa-user clickable"></i>
                 </div>
                 <% } %>
             </div>

@@ -1,7 +1,11 @@
+<% function leftPad(value) { if (value >= 10) { return value.toString(); }
+return '0'+value.toString(); } function toStringByFormatting(source) { let year
+= source.getFullYear(); let month = leftPad(source.getMonth() + 1); let day =
+leftPad(source.getDate()); return `${year}-${month}-${day}`; } %>
 <div class="project-box">
     <div class="title"><%= nickname %>님의 프로젝트</div>
     <hr />
-    <% if (nickname == userData.nickname) { %><button
+    <% if (userData && nickname == userData.nickname) { %><button
         class="clickable create-project"
         onclick="createProject()"
     >
@@ -9,4 +13,32 @@
     </button>
     <hr />
     <% } %>
+    <div class="project-table">
+        <div class="table-header">
+            <div class="project-name">이름</div>
+            <div class="project-time">수정시간</div>
+            <div class="project-option">옵션</div>
+        </div>
+        <hr />
+        <% if (projects.length === 0) { %> <% } else { for (let i = 0; i <
+        projects.length; i++) { %>
+        <div class="clickable table-context">
+            <div class="clickable project-name"><%= projects[i].title %></div>
+            <div class="clickable project-time">
+                <%= toStringByFormatting(projects[i].editDate) %>
+            </div>
+            <div class="clickable project-option">
+                <a
+                    class="clickable button edit-button"
+                    href="/edit?puuid=<%= projects[i].uuid %>"
+                >
+                    <i class="clickable far fa-edit"></i>
+                </a>
+                <div class="clickable button delete-button">
+                    <i class="clickable far fa-trash-alt"></i>
+                </div>
+            </div>
+        </div>
+        <% } } %>
+    </div>
 </div>

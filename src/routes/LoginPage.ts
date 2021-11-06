@@ -6,11 +6,15 @@ class LoginPageRouter extends Router {
         super();
 
         this._router.get('/', async (ctx, next) => {
-            let { id, message } = ctx.query;
+            let { id, message, redirect } = ctx.query;
 
             let msg: string | null =
                 message !== null && typeof message === 'string'
                     ? message
+                    : null;
+            let red: string | null =
+                redirect !== null && typeof redirect === 'string'
+                    ? redirect
                     : null;
 
             let renderRes = this.renderLayout(ctx, ['login.ejs'], {
@@ -18,6 +22,7 @@ class LoginPageRouter extends Router {
                 javascripts: ['login'],
                 data: {
                     previousId: id ? id : null,
+                    redLink: red,
                     errMessage: msg
                         ? await Lang.getLangByCode('ko_kr', msg)
                         : null,

@@ -1,0 +1,48 @@
+* {
+    box-sizing: border-box;
+    overflow: hidden;
+    font-family: 'NexonLv2', sans-serif;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+div .page,
+div .container,
+div .widget {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+div .page {
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.site-header {
+    padding: 0 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+}
+.site-header * {
+    display: flex;
+}
+.site-header .menu {
+    padding: 0 5px;
+}
+
+.container.container-vertical {
+    flex-direction: column;
+}
+.container.container-horizontal {
+    flex-direction: row;
+}

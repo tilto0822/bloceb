@@ -3,6 +3,7 @@ import Logger from '../lib/Logger';
 
 import UserAPIRouter from './UserAPI';
 import Lang from '../lib/Lang';
+import ProjectAPIRouter from './ProjectAPI';
 
 class ProjectPageRouter extends Router {
     constructor() {
@@ -22,6 +23,14 @@ class ProjectPageRouter extends Router {
 
             try {
                 let user = await UserAPIRouter.getUserByName(ctx, nickname);
+                let projects = await ProjectAPIRouter.getUserProjectsByName(
+                    ctx,
+                    nickname
+                );
+
+                for (let p of projects) {
+                    Logger.log(p.editDate);
+                }
 
                 renderRes = this.renderLayout(ctx, ['project_mine.ejs'], {
                     stylesheets: ['project_mine'],
@@ -30,6 +39,7 @@ class ProjectPageRouter extends Router {
                         errMessage: null,
                         nickname: nickname,
                         userData: user,
+                        projects: projects,
                     },
                 });
             } catch (err: any) {

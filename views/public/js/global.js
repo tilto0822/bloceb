@@ -41,3 +41,19 @@ $('#user-popup').on('click', function () {
     if ($('#popup-user').css('display') === 'none') $('#popup-user').show();
     else $('#popup-user').hide();
 });
+
+if ($('.site-header #login').attr('href'))
+    $('.site-header #login').attr(
+        'href',
+        `${$('.site-header #login').attr('href')}?redirect=${
+            window.location.pathname
+        }`
+    );
+
+if ($('#popup-user #logout').attr('href'))
+    $('#popup-user #logout').attr(
+        'href',
+        `${$('#popup-user #logout').attr('href')}?redirect=${
+            window.location.pathname
+        }`
+    );

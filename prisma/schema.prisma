@@ -21,10 +21,12 @@ model User {
 }
 
 model Project {
-  uuid     String @id @unique @default(uuid())
-  title    String
-  xmlCode  String @db.MediumText
-  viewCode String @db.MediumText
-  author   User   @relation(fields: [authorId], references: [uuid])
-  authorId String
+  uuid       String   @id @unique @default(uuid())
+  title      String
+  xmlCode    String   @db.MediumText
+  viewCode   String   @db.MediumText
+  createDate DateTime @default(now())
+  editDate   DateTime @default(now()) @updatedAt
+  author     User     @relation(fields: [authorId], references: [uuid])
+  authorId   String
 }

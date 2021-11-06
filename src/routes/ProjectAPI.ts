@@ -7,6 +7,61 @@ export class ProjectAPIRouter extends Router {
     constructor() {
         super();
 
+        this._router.post('/save', async (ctx) => {
+            let { puuid, title, xmlCode, viewCode } = ctx.request.body;
+            try {
+                let project = await ProjectAPIRouter.saveProject(
+                    ctx,
+                    puuid,
+                    title,
+                    xmlCode,
+                    viewCode
+                );
+                if (project)
+                    ctx.body = {
+                        type: 'Success',
+                        message: `"${title}" 프로젝트를 저장했습니다.`,
+                    };
+                else
+                    ctx.body = {
+                        type: 'Error',
+                        message: `"${title}" 프로젝트 저장에 실패했습니다. 문제가 지속될 경우 문의바랍니다.`,
+                    };
+            } catch (err: any) {
+                ctx.body = {
+                    type: 'Error',
+                    message: `"${title}" 프로젝트 저장에 실패했습니다. 문제가 지속될 경우 문의바랍니다.`,
+                };
+                Logger.error(err);
+            }
+        });
+
+        this._router.post('/load', async (ctx) => {
+            let { puuid } = ctx.request.body;
+            try {
+                let project = await ProjectAPIRouter.getProjectByUUID(
+                    ctx,
+                    puuid
+                );
+                if (project)
+                    ctx.body = {
+                        type: 'Success',
+                        project: project,
+                    };
+                else
+                    ctx.body = {
+                        type: 'Error',
+                        message: `프로젝트를 불러오지 못했습니다.`,
+                    };
+            } catch (err: any) {
+                ctx.body = {
+                    type: 'Error',
+                    message: `프로젝트를 불러오지 못했습니다.`,
+                };
+                Logger.error(err);
+            }
+        });
+
         this._router.get('/create', async (ctx) => {
             if (ctx.loginedUser) {
                 let { title } = ctx.query;
@@ -56,6 +111,26 @@ export class ProjectAPIRouter extends Router {
         if (project === null) {
             throw new Error('BLE:PROJECT_NOT_FOUND');
         }
+        return project;
+    }
+
+    static async saveProject(
+        ctx: Context,
+        projectUUID: string,
+        title: string,
+        xmlCode: string,
+        viewCode: string
+    ) {
+        let project = await ctx.prisma.project.update({
+            where: {
+                uuid: projectUUID,
+            },
+            data: {
+                title: title,
+                xmlCode: xmlCode,
+                viewCode: viewCode,
+            },
+        });
         return project;
     }
 

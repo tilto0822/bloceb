@@ -18,6 +18,9 @@ a {
     text-decoration: none;
     cursor: pointer;
 }
+input {
+    cursor: text;
+}
 
 .clickable {
     cursor: pointer;
@@ -42,6 +45,10 @@ a {
 }
 .site-header .site-menu .menu-select {
     margin: 0 5px;
+}
+.site-header .site-menu .menu-select .fas,
+.site-header .site-menu .menu-select .far {
+    margin-top: 15px;
 }
 .site-header a:-webkit-any-link {
     color: #fff;

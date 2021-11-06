@@ -38,7 +38,7 @@ export class Router {
         this._pathEJSMap = new Map();
     }
 
-    getGlobalData(ctx: Context): renderGlobalData {
+    public static getGlobalData(ctx: Context): renderGlobalData {
         if (ctx.loginedUser !== null)
             return {
                 isLogin: true,
@@ -56,7 +56,7 @@ export class Router {
             };
     }
 
-    renderLayout(
+    protected renderLayout(
         ctx: any,
         renderTarget: string[],
         options: renderLayoutOption = {}
@@ -80,7 +80,7 @@ export class Router {
             ? ['global', ...options.javascripts]
             : ['global'];
 
-        let gd = this.getGlobalData(ctx);
+        let gd = Router.getGlobalData(ctx);
         Logger.log(gd);
 
         let renderResult = ejs.render(layout, {

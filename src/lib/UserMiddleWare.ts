@@ -12,7 +12,10 @@ declare module 'koa' {
 
 export async function UserMiddleWare(ctx: Context, next: any) {
     let token = ctx.cookies.get('access_token');
-    if (typeof token !== 'string') return next(ctx);
+    if (!token || typeof token !== 'string') {
+        ctx.loginedUser = null;
+        return next(ctx);
+    }
 
     try {
         let decoded = await JsonWebToken.decodeToken(token);
