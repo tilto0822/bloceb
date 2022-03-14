@@ -15,7 +15,10 @@ CREATE TABLE `User` (
 CREATE TABLE `Project` (
     `uuid` VARCHAR(191) NOT NULL,
     `title` VARCHAR(191) NOT NULL,
-    `path` VARCHAR(191) NOT NULL,
+    `xmlCode` MEDIUMTEXT NOT NULL,
+    `viewCode` MEDIUMTEXT NOT NULL,
+    `createDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `editDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `authorId` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `Project_uuid_key`(`uuid`),
