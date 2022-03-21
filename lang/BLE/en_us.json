@@ -1,0 +1,9 @@
+{
+    "NONE": "An unknown error has occurred. Contact your administrator if the problem persists",
+    "IDPW_IS_NOT_CORRECT": "Your ID or password is incorrect!",
+    "ALREADY_USING_ID": "This ID is already in use!",
+    "ALREADY_USING_NICKNAME": "This nickname is already using!",
+    "EMAIL_REGEXP_FAILED": "Please follow the email format!",
+    "ALREADY_USING_EMAIL": "This email is already in use!",
+    "USER_NOT_FOUND": "The user could not be found!"
+}
