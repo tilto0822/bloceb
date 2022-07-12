@@ -25,4 +25,6 @@ npm install -D
 ```
 
 2. `.env` 파일을 작성합니다. (`.env.sample` 을 참고하세요)
-3. `npm run test` 를 입력해 실행하면 됩니다. 기본 웹 포트는 80입니다.
+3. `prisma` 폴더 아래의 `migrations` 폴더를 삭제합니다.
+4. `npx prisma migrate dev`를 입력해 DB의 기본 구조를 생성합니다.
+5. `npm run test` 를 입력해 실행하면 됩니다. 기본 웹 포트는 80입니다.
